@@ -1,0 +1,394 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寒泽陌的小工具网站</title>
+       <style>
+         a {
+           text-decoration: none;
+           background-color: #000;
+           border: .5px solid crimson;
+           border-radius: 10px;
+           color: #fff;
+           padding: 8px;
+           }
+     body {
+           background-color: #93bf85;
+           }
+        </style>
+</head>
+<body>
+    <h1>欢迎光临小工具网站</h1>
+    <p>这是一个简单的HTML网站，用于展示一些基本信息和链接。</p>
+    <ul>
+        <li><a href="https://Google.com">谷歌搜索(需要外网)</a></li><br><br>
+        <li><a href="https://baidu.com">百度搜索</a></li><br><br>
+        <li><a href="https://github.com">GitHub</a></li><br><br>
+         <li><a href="https://bing.com">必应搜索</a></li><br><br>
+         <li><a href="https://hzm20.github.io/hzmdwz">我的网站</a></li><br><br>
+         <h1>时钟<h1>
+  <div style="width: 200px; height: auto; border: 2px solid #000; padding: 10px; font-size: 24px; font-weight: bold; text-align: center;" id="clock"></div>
+
+  <script>
+    function displayTime() {
+      var now = new Date();
+      var hours = now.getHours().toString().padStart(2, '0');
+      var minutes = now.getMinutes().toString().padStart(2, '0');
+      var seconds = now.getSeconds().toString().padStart(2, '0');
+      var time = hours + ':' + minutes + ':' + seconds;
+
+      document.getElementById('clock').innerText = time;
+    }
+
+    setInterval(displayTime, 1000);
+  </script>
+    <h1>备忘录</h1>
+
+  <form>
+    <label for="memo">添加备忘录：</label>
+    <input type="text" id="memo" name="memo">
+    <br><br>
+    <input type="button" onclick="addMemo()" value="添加">
+  </form>
+
+  <br>
+
+  <ul id="memoList"></ul>
+
+  <script>
+    var memos = [];
+
+    function addMemo() {
+      var memo = document.getElementById("memo").value;
+
+      if(memo != "") {
+        memos.push(memo);
+        updateMemoList();
+        document.getElementById("memo").value = "";
+      }
+    }
+
+    function deleteMemo(index) {
+      memos.splice(index, 1);
+      updateMemoList();
+    }
+
+    function editMemo(index) {
+      var newMemo = prompt("请输入新备忘录：", memos[index]);
+
+      if(newMemo != null && newMemo != "") {
+        memos[index] = newMemo;
+        updateMemoList();
+      }
+    }
+
+    function updateMemoList() {
+      var memoList = document.getElementById("memoList");
+      memoList.innerHTML = "";
+
+      for(var i=0; i<memos.length; i++) {
+        var memo = memos[i];
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(memo));
+
+        var deleteBtn = document.createElement("button");
+        deleteBtn.appendChild(document.createTextNode("删除"));
+        deleteBtn.onclick = (function(index) {
+          return function() {
+            deleteMemo(index);
+          }
+        })(i);
+
+        var editBtn = document.createElement("button");
+        editBtn.appendChild(document.createTextNode("编辑"));
+        editBtn.onclick = (function(index) {
+          return function() {
+            editMemo(index);
+          }
+        })(i);
+
+        li.appendChild(deleteBtn);
+        li.appendChild(editBtn);
+        memoList.appendChild(li);
+      }
+    }
+  </script>
+    <h1>单位转换器</h1>
+
+  <form>
+    <label for="unitType">选择转换单位：</label>
+    <select id="unitType">
+      <option value="length">长度单位</option>
+      <option value="weight">重量单位</option>
+      <option value="temperature">温度单位</option>
+    </select>
+    <br><br>
+
+    <div id="lengthUnits">
+      <label for="lengthValue">长度值：</label>
+      <input type="number" id="lengthValue" name="lengthValue">
+      <br><br>
+      <label for="fromLengthUnit">从单位：</label>
+      <select id="fromLengthUnit" name="fromLengthUnit">
+        <option value="meters">米</option>
+        <option value="centimeters">厘米</option>
+        <option value="inches">英寸</option>
+        <option value="feet">英尺</option>
+      </select>
+      <br><br>
+      <label for="toLengthUnit">到单位：</label>
+      <select id="toLengthUnit" name="toLengthUnit">
+        <option value="meters">米</option>
+        <option value="centimeters">厘米</option>
+        <option value="inches">英寸</option>
+        <option value="feet">英尺</option>
+      </select>
+    </div>
+
+    <div id="weightUnits">
+      <label for="weightValue">重量值：</label>
+      <input type="number" id="weightValue" name="weightValue">
+      <br><br>
+      <label for="fromWeightUnit">从单位：</label>
+      <select id="fromWeightUnit" name="fromWeightUnit">
+        <option value="kilograms">千克</option>
+        <option value="grams">克</option>
+        <option value="pounds">磅</option>
+        <option value="ounces">盎司</option>
+      </select>
+      <br><br>
+      <label for="toWeightUnit">到单位：</label>
+      <select id="toWeightUnit" name="toWeightUnit">
+        <option value="kilograms">千克</option>
+        <option value="grams">克</option>
+        <option value="pounds">磅</option>
+        <option value="ounces">盎司</option>
+      </select>
+    </div>
+
+    <div id="temperatureUnits">
+      <label for="temperatureValue">温度值：</label>
+      <input type="number" id="temperatureValue" name="temperatureValue">
+      <br><br>
+      <label for="fromTemperatureUnit">从单位：</label>
+      <select id="fromTemperatureUnit" name="fromTemperatureUnit">
+        <option value="celsius">摄氏度</option>
+        <option value="fahrenheit">华氏度</option>
+        <option value="kelvin">开氏度</option>
+      </select>
+      <br><br>
+      <label for="toTemperatureUnit">到单位：</label>
+      <select id="toTemperatureUnit" name="toTemperatureUnit">
+        <option value="celsius">摄氏度</option>
+        <option value="fahrenheit">华氏度</option>
+        <option value="kelvin">开氏度</option>
+      </select>
+    </div>
+
+    <br><br>
+    <input type="button" onclick="convertUnit()" value="转换">
+  </form>
+
+  <br>
+
+  <div id="result"></div>
+
+  <script>
+    function convertUnit() {
+      var unitType = document.getElementById("unitType").value;
+
+      switch(unitType) {
+        case "length":
+          var lengthValue = document.getElementById("lengthValue").value;
+          var fromLengthUnit = document.getElementById("fromLengthUnit").value;
+          var toLengthUnit = document.getElementById("toLengthUnit").value;
+
+          if(fromLengthUnit == toLengthUnit) {
+            var result = lengthValue;
+          }
+          else if(fromLengthUnit == "meters") {
+            if(toLengthUnit == "centimeters") {
+              var result = lengthValue * 100;
+            }
+            else if(toLengthUnit == "inches") {
+              var result = lengthValue * 39.37;
+            }
+            else if(toLengthUnit == "feet") {
+              var result = lengthValue * 3.28;
+            }
+          }
+          else if(fromLengthUnit == "centimeters") {
+            if(toLengthUnit == "meters") {
+              var result = lengthValue / 100;
+            }
+            else if(toLengthUnit == "inches") {
+              var result = lengthValue / 2.54;
+            }
+            else if(toLengthUnit == "feet") {
+              var result = lengthValue / 30.48;
+            }
+          }
+          else if(fromLengthUnit == "inches") {
+            if(toLengthUnit == "meters") {
+              var result = lengthValue / 39.37;
+            }
+            else if(toLengthUnit == "centimeters") {
+              var result = lengthValue * 2.54;
+            }
+            else if(toLengthUnit == "feet") {
+              var result = lengthValue / 12;
+            }
+          }
+          else if(fromLengthUnit == "feet") {
+            if(toLengthUnit == "meters") {
+              var result = lengthValue / 3.28;
+            }
+            else if(toLengthUnit == "centimeters") {
+              var result = lengthValue * 30.48;
+            }
+            else if(toLengthUnit == "inches") {
+              var result = lengthValue * 12;
+            }
+          }
+
+          var unitLabel = (result == 1 ? toLengthUnit.slice(0, -1) : toLengthUnit);
+          document.getElementById("result").innerHTML = lengthValue + " " + fromLengthUnit + " = " + result.toFixed(2) + " " + unitLabel;
+          break;
+
+        case "weight":
+          var weightValue = document.getElementById("weightValue").value;
+          var fromWeightUnit = document.getElementById("fromWeightUnit").value;
+          var toWeightUnit = document.getElementById("toWeightUnit").value;
+
+          if(fromWeightUnit == toWeightUnit) {
+            var result = weightValue;
+          }
+          else if(fromWeightUnit == "kilograms") {
+            if(toWeightUnit == "grams") {
+              var result = weightValue * 1000;
+            }
+            else if(toWeightUnit == "pounds") {
+              var result = weightValue * 2.20462;
+            }
+            else if(toWeightUnit == "ounces") {
+              var result = weightValue * 35.274;
+            }
+          }
+          else if(fromWeightUnit == "grams") {
+            if(toWeightUnit == "kilograms") {
+              var result = weightValue / 1000;
+            }
+            else if(toWeightUnit == "pounds") {
+              var result = weightValue / 453.59237;
+            }
+            else if(toWeightUnit == "ounces") {
+              var result = weightValue / 28.34952;
+            }
+          }
+          else if(fromWeightUnit == "pounds") {
+            if(toWeightUnit == "kilograms") {
+              var result = weightValue / 2.20462;
+            }
+            else if(toWeightUnit == "grams") {
+              var result = weightValue * 453.59237;
+            }
+            else if(toWeightUnit == "ounces") {
+              var result = weightValue * 16;
+            }
+          }
+          else if(fromWeightUnit == "ounces") {
+            if(toWeightUnit == "kilograms") {
+              var result = weightValue / 35.274;
+            }
+            else if(toWeightUnit == "grams") {
+              var result = weightValue * 28.34952;
+            }
+            else if(toWeightUnit == "pounds") {
+              var result = weightValue / 16;
+            }
+          }
+
+          var unitLabel = (result == 1 ? toWeightUnit.slice(0, -1) : toWeightUnit);
+          document.getElementById("result").innerHTML = weightValue + " " + fromWeightUnit + " = " + result.toFixed(2) + " " + unitLabel;
+          break;
+
+        case "temperature":
+          var temperatureValue = document.getElementById("temperatureValue").value;
+          var fromTemperatureUnit = document.getElementById("fromTemperatureUnit").value;
+          var toTemperatureUnit = document.getElementById("toTemperatureUnit").value;
+
+          if(fromTemperatureUnit == toTemperatureUnit) {
+            var result = temperatureValue;
+          }
+          else if(fromTemperatureUnit == "celsius") {
+            if(toTemperatureUnit == "fahrenheit") {
+              var result = temperatureValue * 9/5 + 32;
+            }
+            else if(toTemperatureUnit == "kelvin") {
+              var result = temperatureValue + 273.15;
+            }
+          }
+          else if(fromTemperatureUnit == "fahrenheit") {
+            if(toTemperatureUnit == "celsius") {
+              var result = (temperatureValue - 32) * 5/9;
+            }
+            else if(toTemperatureUnit == "kelvin") {
+              var result = (temperatureValue + 459.67) * 5/9;
+            }
+          }
+          else if(fromTemperatureUnit == "kelvin") {
+            if(toTemperatureUnit == "celsius") {
+              var result = temperatureValue - 273.15;
+            }
+            else if(toTemperatureUnit == "fahrenheit") {
+              var result = temperatureValue * 9/5 - 459.67;
+            }
+          }
+
+          var unitLabel = toTemperatureUnit.charAt(0).toUpperCase() + toTemperatureUnit.slice(1);
+          document.getElementById("result").innerHTML = temperatureValue + " " + fromTemperatureUnit + " = " + result.toFixed(2) + " " + unitLabel;
+          break;
+      }
+    }
+  </script>
+  	<h1>文本颜色生成器</h1>
+
+	<form onsubmit="return false">
+		<label for="textInput">输入文本：</label>
+		<input type="text" id="textInput" name="textInput" onchange="changeColor()" onkeyup="changeColor()" required>
+		<br><br>
+
+		<label for="colorInput">选择颜色：</label>
+		<select id="colorInput" name="colorInput" onchange="changeColor()">
+			<option value="black">黑色</option>
+			<option value="red">红色</option>
+			<option value="green">绿色</option>
+			<option value="blue">蓝色</option>
+		</select>
+		<br><br>
+
+		<input type="button" onclick="randomColor()" value="随机颜色">
+	</form>
+
+	<br>
+
+	<div id="result"></div>
+
+	<script>
+		function changeColor() {
+			var textInput = document.getElementById("textInput").value;
+			var colorInput = document.getElementById("colorInput").value;
+			document.getElementById("result").innerHTML = "<span style='color: " + colorInput + "'>" + textInput + "</span>";
+		}
+
+		function randomColor() {
+			var colors = ["black", "red", "green", "blue"];
+			var randomIndex = Math.floor(Math.random() * colors.length);
+			var randomColor = colors[randomIndex];
+			document.getElementById("colorInput").value = randomColor;
+			changeColor();
+		}
+	</script>
+    <p>感谢您的访问！</p><br><p>Thank you so much</p>
+</body>
+</html>
